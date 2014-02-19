@@ -1,0 +1,10 @@
+deprecation=true
+eclipse.preferences.version=1
+explaintypes=true
+formatter.compactStringConcatenation=true
+formatter.indentLocalDefs=true
+formatter.multilineScaladocCommentsStartOnFirstLine=true
+formatter.placeScaladocAsterisksBeneathSecondAsterisk=true
+org.scala-ide.sdt.core.diagnostic.currentPluginVersion=3.0.2.v-2_10-201310181157-0880865
+org.scala-ide.sdt.core.preferences.Templates=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><templates/>
+scala.compiler.additionalParams=-language postfixOps

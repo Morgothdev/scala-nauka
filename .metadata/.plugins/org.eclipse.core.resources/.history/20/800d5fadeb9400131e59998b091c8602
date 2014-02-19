@@ -1,0 +1,62 @@
+object Generator {
+
+    class ScalonaStrona(strony: List[Any]) {
+        override def toString = strony.foldLeft("")(_ + _+",")
+        def toList() = strony
+    }
+
+    class ZbitkaStron(x: List[ScalonaStrona]) {
+        val strony = pierwszaStrona(x)
+        def pierwszaStrona(zbitka: List[ScalonaStrona]): List[ScalonaStrona] =
+            zbitka.length match {
+                case 0 => List()
+                case _ => zbitka.last :: zbitka.head :: drugaStrona(zbitka.drop(1).dropRight(1))
+            }
+
+        def drugaStrona(zbitka: List[ScalonaStrona]): List[ScalonaStrona] =
+            zbitka.length match {
+                case 0 => List()
+                case _ => zbitka.head :: zbitka.last :: pierwszaStrona(zbitka.drop(1).dropRight(1))
+            }
+
+        override def toString() = strony.foldLeft("")(_ + _)
+        def toList() =
+            strony map (_ toList)
+    }
+
+    class Ksiazka(zbitki: List[ZbitkaStron]) {
+        override def toString() = zbitki.foldLeft("")(_ + _)
+        def toList() =
+            zbitki map (_ toList)
+    }
+
+    def scalStrony(strony: List[Any], dzielnik: Int): List[ScalonaStrona] =
+        strony.length match {
+            case 0 => List()
+            case _ => new ScalonaStrona(strony.slice(0, dzielnik)) :: scalStrony(strony.drop(dzielnik), dzielnik)
+        }
+
+    def zbitki(strony: List[ScalonaStrona], dzielnik: Int): List[ZbitkaStron] = {
+        if ((dzielnik % 2) != 0) throw new IllegalArgumentException("nie parzyste!"+dzielnik)
+        strony.length match {
+            case 0 => List()
+            case _ => new ZbitkaStron(strony.slice(0, dzielnik)) :: zbitki(strony.drop(dzielnik), dzielnik)
+        }
+    }
+
+    def podziel(stron: Int, kartekWZbitce: Int = 5, stronNaStrone: Int = 2) = {
+        val scaloneStrony = scalStrony(1 to stron toList, stronNaStrone)
+        val stronWZbitce = kartekWZbitce * 2 * 2
+        val zbitkiDoDruku = zbitki(scaloneStrony, stronWZbitce)
+        new Ksiazka(zbitkiDoDruku)
+    }
+
+    def main(args: Array[String]) {
+        val ksiazka = podziel(args(0) toInt, args(1) toInt, args(2) toInt)
+        if (args.length>3){
+            (ksiazka toList grouped(args(3) toInt) toList() reduceLeft(_+"\n"+_)
+        }else{
+            println(ksiazka.toString)
+        }
+    }
+}
